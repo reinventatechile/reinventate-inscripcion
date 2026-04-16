@@ -189,7 +189,7 @@
 
   <div class="card">
     <div class="card-top">
-      <img class="logo" src="https://reinventatechile.github.io/inscripcion/logo.png" alt="Reinvéntate">
+      <img class="logo" src="https://raw.githubusercontent.com/reinventatechile/inscripcion/main/logo.png" alt="Reinvéntate">
       <p class="subtitulo">Verificación de asistente</p>
     </div>
 
@@ -241,7 +241,7 @@
 
   <script>
     // URL del Apps Script — debe coincidir con tu deployment
-    var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw6SFLgenek1pUmDhOCdVRncSuLLZksju-MN_uZ_azbKRd5rpvjcJmV7_Xyn_akNKNJ/exec';
+    var APPS_SCRIPT_URL = 'PEGA_AQUI_TU_URL_DE_APPS_SCRIPT';
 
     function getParam(name) {
       var params = new URLSearchParams(window.location.search);
@@ -262,30 +262,8 @@
     }
 
     function verificar(token) {
-function verificar(token) {
-  var url = APPS_SCRIPT_URL + '?action=verificar&token=' + encodeURIComponent(token);
-  fetch(url)
-    .then(function(r) { return r.json(); })
-    .then(function(data) {
-      if (data.ok) {
-        document.getElementById('nombre-inscrita').textContent = data.nombre;
-        mostrar('ok');
-      } else if (!data.encontrado) {
+      if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.indexOf('PEGA_AQUI') !== -1) {
         mostrar('error');
-        document.getElementById('titulo-error').textContent = 'Código no encontrado';
-        document.getElementById('desc-error').textContent = 'Este QR no corresponde a ninguna inscripción. Contacta al equipo: reinventate@casarenata.cl';
-      } else {
-        mostrar('error');
-        document.getElementById('titulo-error').textContent = 'Pendiente de confirmación';
-        document.getElementById('desc-error').textContent = 'La inscripción de ' + (data.nombre || '') + ' aún no ha sido confirmada. Contacta al equipo.';
-      }
-    })
-    .catch(function() {
-      mostrar('error');
-      document.getElementById('titulo-error').textContent = 'Error de conexión';
-      document.getElementById('desc-error').textContent = 'No se pudo verificar. Revisa tu conexión e intenta de nuevo.';
-    });
-}
         document.getElementById('titulo-error').textContent = 'Sistema no configurado';
         document.getElementById('desc-error').textContent = 'La URL del sistema no está configurada. Contacta al equipo.';
         return;
@@ -327,6 +305,9 @@ function verificar(token) {
       verificar(token);
     }
   </script>
+
+</body>
+</html>
 
 </body>
 </html>
