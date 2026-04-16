@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verificación — Reinvéntate</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: Georgia, serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: #6B1226;
+      padding: 24px;
+      transition: background 0.5s ease;
+    }
+
+    body.ok    { background: #1A4731; }
+    body.error { background: #6B1226; }
+    body.loading { background: #3D3040; }
+
+    .card {
+      background: #fff;
+      border-radius: 16px;
+      max-width: 380px;
+      width: 100%;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+    }
+
+    .card-top {
+      padding: 32px 32px 24px;
+      text-align: center;
+      background: #FAE8EC;
+      border-bottom: 1px solid #F2B8C6;
+    }
+
+    .logo {
+      max-width: 120px;
+      height: auto;
+      display: block;
+      margin: 0 auto 16px;
+    }
+
+    .subtitulo {
+      font-size: 9px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: rgba(107,18,38,0.45);
+    }
+
+    .card-body {
+      padding: 40px 32px 36px;
+      text-align: center;
+    }
+
+    /* Estados visuales */
+    .icono {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 24px;
+      font-size: 42px;
+      line-height: 1;
+    }
+
+    .icono.ok      { background: rgba(26,71,49,0.1); border: 3px solid #1A4731; }
+    .icono.error   { background: rgba(107,18,38,0.08); border: 3px solid #6B1226; }
+    .icono.loading { background: rgba(80,60,100,0.08); border: 3px solid #9B7BB5; }
+
+    .estado-titulo {
+      font-size: 26px;
+      font-weight: bold;
+      font-style: italic;
+      margin-bottom: 8px;
+    }
+
+    .estado-titulo.ok    { color: #1A4731; }
+    .estado-titulo.error { color: #6B1226; }
+    .estado-titulo.loading { color: #3D3040; }
+
+    .nombre {
+      font-family: Georgia, serif;
+      font-size: 20px;
+      color: #3D0A16;
+      margin-bottom: 6px;
+      font-style: italic;
+    }
+
+    .estado-desc {
+      font-family: Arial, sans-serif;
+      font-size: 13px;
+      color: rgba(60,40,50,0.55);
+      line-height: 1.6;
+      margin-top: 12px;
+    }
+
+    .badge-ok {
+      display: inline-block;
+      background: rgba(26,71,49,0.1);
+      border: 1.5px solid #1A4731;
+      color: #1A4731;
+      font-family: Arial, sans-serif;
+      font-size: 11px;
+      font-weight: bold;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      border-radius: 20px;
+      padding: 6px 18px;
+      margin-top: 16px;
+    }
+
+    .badge-error {
+      display: inline-block;
+      background: rgba(107,18,38,0.07);
+      border: 1.5px solid #6B1226;
+      color: #6B1226;
+      font-family: Arial, sans-serif;
+      font-size: 11px;
+      font-weight: bold;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      border-radius: 20px;
+      padding: 6px 18px;
+      margin-top: 16px;
+    }
+
+    .evento-info {
+      margin-top: 24px;
+      padding: 14px 20px;
+      background: rgba(107,18,38,0.04);
+      border-left: 3px solid #6B1226;
+      border-radius: 0 6px 6px 0;
+      text-align: left;
+    }
+
+    .evento-info p {
+      font-family: Arial, sans-serif;
+      font-size: 12px;
+      color: rgba(60,10,22,0.6);
+      line-height: 1.7;
+      margin: 0;
+    }
+
+    .evento-info strong {
+      color: #3D0A16;
+    }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid rgba(107,18,38,0.15);
+      border-top-color: #9B7BB5;
+      border-radius: 50%;
+      animation: spin 0.9s linear infinite;
+      margin: 0 auto;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .footer-card {
+      background: #4D0D1B;
+      padding: 14px;
+      text-align: center;
+    }
+
+    .footer-card p {
+      font-family: Arial, sans-serif;
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      color: rgba(242,184,198,0.35);
+      text-transform: uppercase;
+    }
+
+    /* Sin token */
+    .sin-token .estado-titulo { color: #6B3040; }
+  </style>
+</head>
+<body class="loading">
+
+  <div class="card">
+    <div class="card-top">
+      <img class="logo" src="https://raw.githubusercontent.com/reinventatechile/inscripcion/main/logo.png" alt="Reinvéntate">
+      <p class="subtitulo">Verificación de asistente</p>
+    </div>
+
+    <div class="card-body" id="contenido">
+      <!-- Estado cargando -->
+      <div id="estado-loading">
+        <div class="icono loading" style="background:transparent;border:none;">
+          <div class="spinner"></div>
+        </div>
+        <p class="estado-titulo loading">Verificando...</p>
+        <p class="estado-desc">Estamos consultando tu inscripción.<br>Un momento.</p>
+      </div>
+
+      <!-- Estado ok (confirmada) — oculto hasta cargar -->
+      <div id="estado-ok" style="display:none;">
+        <div class="icono ok">✓</div>
+        <p class="nombre" id="nombre-inscrita"></p>
+        <span class="badge-ok">✓ Inscripción confirmada</span>
+        <div class="evento-info">
+          <p>
+            <strong>Reinvéntate</strong><br>
+            Sábado 30 de mayo de 2026 · 11:30 hrs<br>
+            Hotel Casona Freire<br>
+            Ramón Freire 1057, Puerto Varas
+          </p>
+        </div>
+      </div>
+
+      <!-- Estado error (no encontrada o no confirmada) — oculto -->
+      <div id="estado-error" style="display:none;">
+        <div class="icono error">✕</div>
+        <p class="estado-titulo error" id="titulo-error">No encontrada</p>
+        <span class="badge-error">No válida</span>
+        <p class="estado-desc" id="desc-error">Este código no corresponde a una inscripción confirmada.<br>Por favor contacta al equipo.</p>
+      </div>
+
+      <!-- Sin token en URL -->
+      <div id="estado-sin-token" style="display:none;">
+        <div class="icono error" style="border-color:#9B7BB5;">🔍</div>
+        <p class="estado-titulo sin-token">Sin código</p>
+        <p class="estado-desc">Esta página requiere un código QR válido.<br>Escanea el QR del correo de confirmación.</p>
+      </div>
+    </div>
+
+    <div class="footer-card">
+      <p>reinventate@casarenata.cl · @reinventate.chile</p>
+    </div>
+  </div>
+
+  <script>
+    // URL del Apps Script — debe coincidir con tu deployment
+    var APPS_SCRIPT_URL = 'PEGA_AQUI_TU_URL_DE_APPS_SCRIPT';
+
+    function getParam(name) {
+      var params = new URLSearchParams(window.location.search);
+      return params.get(name);
+    }
+
+    function mostrar(estado) {
+      document.getElementById('estado-loading').style.display  = 'none';
+      document.getElementById('estado-ok').style.display       = 'none';
+      document.getElementById('estado-error').style.display    = 'none';
+      document.getElementById('estado-sin-token').style.display= 'none';
+      document.getElementById('estado-' + estado).style.display = 'block';
+
+      var body = document.body;
+      body.classList.remove('loading', 'ok', 'error');
+      if (estado === 'ok')  body.classList.add('ok');
+      if (estado === 'error' || estado === 'sin-token') body.classList.add('error');
+    }
+
+    function verificar(token) {
+      if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.indexOf('PEGA_AQUI') !== -1) {
+        mostrar('error');
+        document.getElementById('titulo-error').textContent = 'Sistema no configurado';
+        document.getElementById('desc-error').textContent = 'La URL del sistema no está configurada. Contacta al equipo.';
+        return;
+      }
+
+      var url = APPS_SCRIPT_URL + '?action=verificar&token=' + encodeURIComponent(token);
+
+      fetch(url)
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          if (data.ok) {
+            // Confirmada ✓
+            document.getElementById('nombre-inscrita').textContent = data.nombre;
+            mostrar('ok');
+          } else if (!data.encontrado) {
+            // Token no existe
+            mostrar('error');
+            document.getElementById('titulo-error').textContent = 'Código no encontrado';
+            document.getElementById('desc-error').textContent = 'Este QR no corresponde a ninguna inscripción. Contacta al equipo: reinventate@casarenata.cl';
+          } else {
+            // Encontrada pero no confirmada
+            mostrar('error');
+            document.getElementById('titulo-error').textContent = 'Pendiente de confirmación';
+            document.getElementById('desc-error').textContent = 'La inscripción de ' + (data.nombre || '') + ' aún no ha sido confirmada. Contacta al equipo.';
+          }
+        })
+        .catch(function() {
+          mostrar('error');
+          document.getElementById('titulo-error').textContent = 'Error de conexión';
+          document.getElementById('desc-error').textContent = 'No se pudo verificar. Revisa tu conexión a internet e intenta de nuevo.';
+        });
+    }
+
+    // Iniciar
+    var token = getParam('t');
+    if (!token) {
+      mostrar('sin-token');
+    } else {
+      verificar(token);
+    }
+  </script>
+
+</body>
+</html>
