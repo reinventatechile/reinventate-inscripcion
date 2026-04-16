@@ -683,13 +683,14 @@
           <div class="price-note">Pago por<br>transferencia<br>bancaria</div>
         </div>
 
-<div class="transfer">
+
+        <div class="transfer">
           <div class="transfer-title-row">
             <span class="transfer-title">Datos de transferencia</span>
             <button class="copy-all-btn" onclick="copyAllTransfer()">📋 Copiar todo</button>
           </div>
           <div class="tr">
-           <span class="tr-k">Titular</span>
+            <span class="tr-k">Titular</span>
             <span class="tr-v">Casa Renata Spa</span>
           </div>
           <div class="tr">
@@ -945,12 +946,11 @@ function copyText(text) {
  
 function copyAllTransfer() {
   var texto =
-    'Casa Renata Spa\n' +
     '77.584.271-7\n' +
     'Banco Santander\n' +
     'Cuenta Corriente\n' +
     '0-000-8887815-9\n' +
-    'reinventate@casarenata.cl\n'
+    'reinventate@casarenata.cl';
   navigator.clipboard.writeText(text).then(function() {
     // brief feedback
     var toast = document.createElement('div');
