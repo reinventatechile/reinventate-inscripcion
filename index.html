@@ -945,13 +945,12 @@ function copyText(text) {
  
 function copyAllTransfer() {
   var texto =
-    'Titular: Casa Renata Spa\n' +
-    'RUT: 77.584.271-7\n' +
-    'Banco: Banco Santander\n' +
-    'Tipo: Cuenta Corriente\n' +
-    'N° Cuenta: 0-000-8887815-9\n' +
-    'Email: reinventate@casarenata.cl\n' +
-    'Monto: $25.000';
+    'Casa Renata Spa\n' +
+    '77.584.271-7\n' +
+    'Banco Santander\n' +
+    'Cuenta Corriente\n' +
+    '0-000-8887815-9\n' +
+    'reinventate@casarenata.cl\n'
   navigator.clipboard.writeText(text).then(function() {
     // brief feedback
     var toast = document.createElement('div');
